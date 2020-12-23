@@ -1,0 +1,21 @@
+# files
+.git
+*.log
+*.zip
+
+# folders
+node_modules/
+logs/
+coverage/
+public/
+views/
+
+# 自有配置
+app/build/cache/
+app/public/
+app/schema-backup/
+.vscode/
+.idea/
+npm-debug.log.*
+.DS_Store
+package-lock.json
