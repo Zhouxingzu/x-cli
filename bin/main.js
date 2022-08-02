@@ -1,14 +1,19 @@
 #!/usr/bin/env node
 'use strict';
 const program = require('commander');
+const chalk = require('chalk');
+const Inquirer = require('inquirer');
+const Git = require("nodegit");
 const log = require('../lib/log');
+const util = require('../lib/util');
 const path = require('path');
 const fs = require('fs');
 
 // 版本
 program
-    .version(require('../package').version)
+    .name('x-cli')
     .usage('<commnad [options]>')
+    .version(`x-cli ${require('../package').version}`)
     .option('-i, --init', '初始化项目依赖配置');
  
 // 命令
@@ -16,38 +21,46 @@ program
     .command('init')
     .description('crate a new project')
     .action(() => {
-        // 输入的 name
-        log.info('-----------准备初始化-----------');
-        let to = path.resolve('./');
-        let filePath = to + '/test/a.txt';
-        fs.open(filePath, 'a', (err, fd)=>{
-            if(!err) {
-                log.info('打开文件');
-                fs.writeFile(fd, '现在时间是：' + Date.now(), (err)=>{
-                    if(!err) {
-                        log.success('写入成功');
-                    }else{
-                        throw err;
-                    }
-                });
-                //关闭文件
-                fs.close(fd, (err)=>{
-                    if(!err) {
-                        log.success('文件保存成功');
-                    }else{
-                        throw err;
-                    }
-                });
-            } else {
-                log.error(err);
-            }
+        // 选择模板
+        new Inquirer.prompt([
+            {
+                name: "type",
+                type: "list",
+                message: "Check the features needed for your project:",
+                choices: [
+                    {
+                        name: "Vue",
+                        value: 1
+                    },
+                    {
+                        name: "React",
+                        value: 2
+                    },
+                ],
+            },
+        ]).then((data) => {
+            console.log(data);
+            util.loading('模板拉取中···', ()=>{
+                const downUrl = 'https://git.zhubajie.la/dongweixing/cvms-demo-x.git'; 
+                log.info('--------------------------');
+                log.info('> 开始拉取模板');
+                Git.Clone(downUrl, "./template")
+                    .then(function(repo) {
+                        log.success('模板拉取完毕');
+                        log.info('');
+                    })
+                    .catch(function(err) { log.error(err); });
+            })
+
         });
+
     });
  
 // 触发 --help 后打印一些信息
 program.on('--help', () => {
-    log.info();
-    log.info('zhouxingzu');
+    log.info('');
+    log.info(`Run ${chalk.cyan("x-cli <command> --help")} for detailed usage of given command`);
+    log.info('');
 });
  
  

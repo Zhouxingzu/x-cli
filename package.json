@@ -19,6 +19,9 @@
     "url": "https://github.com/Zhouxingzu/x-cli/issues"
   },
   "homepage": "https://github.com/Zhouxingzu/x-cli#readme",
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "dependencies": {
     "chalk": "^4.1.0",
     "clear": "^0.1.0",
@@ -27,6 +30,8 @@
     "fs": "0.0.1-security",
     "fs-extra": "^9.0.1",
     "inquirer": "^7.3.3",
+    "nodegit": "^0.27.0",
+    "ora": "^5.0.0",
     "path": "^0.12.7"
   }
 }
